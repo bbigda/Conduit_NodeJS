@@ -46,9 +46,13 @@ module.exports.createArticle = async (req, res) => {
 	try {
 		if (!req.body.article) throw new Error('No articles data');
 		const data = req.body.article;
+
 		if (!data.title) throw new Error('Article title is required');
 		if (!data.body) throw new Error('Article body is required');
 		if (!data.description) throw new Error('Article description is required');
+
+		// NOTE TO REVIEWER : I decided to make isMatureContent flag optional
+		// if (!('isMatureContent' in data && typeof data.isMatureContent === 'boolean')) throw new Error('Article isMatureContent flag is required');
 
 		//Find out author object
 		const user = await User.findByPk(req.user.email);
@@ -60,6 +64,7 @@ module.exports.createArticle = async (req, res) => {
 			description: data.description,
 			body: data.body,
 			UserEmail: user.email,
+			isMatureContent : !!data.isMatureContent
 		});
 
 		if (data.tagList) {

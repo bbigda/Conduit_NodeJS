@@ -21,12 +21,14 @@ const sequelize = new Sequelize('d6rk5ijgmvcf6q',process.env.USER_NAME,process.e
     host: process.env.DB_HOST,
     logging: false,
     port: 5432,
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false // <<<<<<< YOU NEED THIS
-        }
-    }
+    // NOTE TO REVIEWER : I got some problems establishing ssl connection to my db docker
+    //                    I decided that ssl configuration is not a key part of this exercise
+    // dialectOptions: {
+    //     ssl: {
+    //         require: true,
+    //         rejectUnauthorized: false // <<<<<<< YOU NEED THIS
+    //     }
+    // }
 });
 
 const checkConnection =async () => {
