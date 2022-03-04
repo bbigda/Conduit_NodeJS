@@ -24,22 +24,3 @@ const Article = sequelize.define('Article', {
 })
 
 module.exports = Article
-
-/* {
-    "article": {
-        "slug": "new-article",
-        "title": "New Article",
-        "description": "article description",
-        "body": "article content",
-        "isMatureContent": false,
-        "createdAt": "2022-03-04T12:46:22.579Z",
-        "updatedAt": "2022-03-04T12:46:22.579Z",
-        "UserEmail": "admin@admin.pl",
-        "tagList": [],
-        "author": {
-            "username": "admin",
-            "bio": null,
-            "image": null
-        }
-    }
-} */
