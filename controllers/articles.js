@@ -286,19 +286,37 @@ module.exports.getMatureContent = async (req, res) => {
 // TODO : code review
 module.exports.getFeed = async (req, res) => {
     try {
+        // Code Review : this query is venerable to sql injection via user email.
+        // my recommendation is to use query replacements
+
+        // BEFORE
+        // const query = `
+        //     SELECT UserEmail
+        //     FROM followers
+        //     WHERE followerEmail = "${req.user.email}"`;
+        // const followingUsers = await sequelize.query(query);
+
+        // AFTER
         const query = `
             SELECT UserEmail
             FROM followers
-            WHERE followerEmail = "${req.user.email}"`;
-        const followingUsers = await sequelize.query(query);
+            WHERE followerEmail = ?`;
+        const followingUsers = await sequelize.query(query, {replacements: [req.user.email]});
+
+        // unexpected coercion, should be ===
         if (followingUsers[0].length == 0) {
             return res.json({articles: []});
         }
+
+        // better to use map, poor variable name (t)
+        // let followingUserEmail = followingUsers[0].map(followingUser => followingUser.email)
         let followingUserEmail = [];
         for (let t of followingUsers[0]) {
             followingUserEmail.push(t.UserEmail);
         }
 
+        // poor variable name
+        // i would recomend : article -> followedArticles
         let article = await Article.findAll({
             where: {
                 UserEmail: followingUserEmail,
@@ -306,6 +324,7 @@ module.exports.getFeed = async (req, res) => {
             include: [Tag, User],
         });
 
+        // once again better to use map
         let articles = [];
         for (let t of article) {
             let addArt = sanitizeOutputMultiple(t);
