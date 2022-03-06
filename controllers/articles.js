@@ -272,7 +272,7 @@ module.exports.getMatureContent = async (req, res) => {
         });
 
         const articles = matureContentArticles.map(article => sanitizeOutputMultiple(article));
-        res.json({articles});
+        return res.status(200).json({articles});
 
     } catch (e) {
         const code = res.statusCode ? res.statusCode : 422;
@@ -283,7 +283,6 @@ module.exports.getMatureContent = async (req, res) => {
 
 }
 
-// TODO : code review
 module.exports.getFeed = async (req, res) => {
     try {
         // Code Review : this query is venerable to sql injection via user email.
